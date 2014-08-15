@@ -20,11 +20,21 @@ public class AutomaticFileBlockingQueueDecorator<E> extends FileBlockingQueueDec
     public AutomaticFileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue, File queueFile) {
         super(decoratedBlockingQueue, queueFile);
         autosave = true;
+        if (this.queueFile.exists()){
+            try {
+                this.loadQueue();
+            } catch (Exception e) {}
+        }
     }
 
     public AutomaticFileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue, String queueFile) {
         super(decoratedBlockingQueue, queueFile);
         autosave = true;
+        if (this.queueFile.exists()){
+            try {
+                this.loadQueue();
+            } catch (Exception e) {}
+        }
     }
 
     public boolean isCurrentStateSaved() {

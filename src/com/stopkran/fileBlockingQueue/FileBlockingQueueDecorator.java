@@ -8,21 +8,21 @@ import java.util.concurrent.TimeUnit;
 
 public class FileBlockingQueueDecorator<E> implements FileBlockingQueue<E>{
 
-    BlockingQueue decoratedBlockingQueue = null;
+    BlockingQueue<E> decoratedBlockingQueue = null;
     File queueFile = null;
     ObjectOutputStream outputStream = null;
     ObjectInputStream inputStream = null;
 
-    public FileBlockingQueueDecorator(BlockingQueue decoratedBlockingQueue) {
+    public FileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue) {
         this.decoratedBlockingQueue = decoratedBlockingQueue;
     }
 
-    public FileBlockingQueueDecorator(BlockingQueue decoratedBlockingQueue, File queueFile) {
+    public FileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue, File queueFile) {
         this.decoratedBlockingQueue = decoratedBlockingQueue;
         this.queueFile = queueFile;
     }
 
-    public FileBlockingQueueDecorator(BlockingQueue decoratedBlockingQueue, String queueFile) {
+    public FileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue, String queueFile) {
         this.decoratedBlockingQueue = decoratedBlockingQueue;
         this.queueFile = new File(queueFile);
     }
@@ -54,7 +54,7 @@ public class FileBlockingQueueDecorator<E> implements FileBlockingQueue<E>{
         decoratedBlockingQueue.clear();
         while (true){
             try {
-                decoratedBlockingQueue.add(inputStream.readObject());
+                decoratedBlockingQueue.add((E)inputStream.readObject());
             } catch (IOException e){
                 break;
             }
@@ -72,32 +72,32 @@ public class FileBlockingQueueDecorator<E> implements FileBlockingQueue<E>{
     }
 
     @Override
-    public boolean add(Object o) {
+    public boolean add(E o) {
         return decoratedBlockingQueue.add(o);
     }
 
     @Override
-    public boolean offer(Object o) {
+    public boolean offer(E o) {
         return decoratedBlockingQueue.offer(o);
     }
 
     @Override
-    public void put(Object o) throws InterruptedException {
+    public void put(E o) throws InterruptedException {
         decoratedBlockingQueue.put(o);
     }
 
     @Override
-    public boolean offer(Object o, long l, TimeUnit timeUnit) throws InterruptedException {
+    public boolean offer(E o, long l, TimeUnit timeUnit) throws InterruptedException {
         return decoratedBlockingQueue.offer(o, l, timeUnit);
     }
 
     @Override
-    public Object take() throws InterruptedException {
+    public E take() throws InterruptedException {
         return decoratedBlockingQueue.take();
     }
 
     @Override
-    public Object poll(long l, TimeUnit timeUnit) throws InterruptedException {
+    public E poll(long l, TimeUnit timeUnit) throws InterruptedException {
         return decoratedBlockingQueue.poll(l, timeUnit);
     }
 
@@ -127,22 +127,22 @@ public class FileBlockingQueueDecorator<E> implements FileBlockingQueue<E>{
     }
 
     @Override
-    public Object remove() {
+    public E remove() {
         return decoratedBlockingQueue.remove();
     }
 
     @Override
-    public Object poll() {
+    public E poll() {
         return decoratedBlockingQueue.poll();
     }
 
     @Override
-    public Object element() {
+    public E element() {
         return decoratedBlockingQueue.element();
     }
 
     @Override
-    public Object peek() {
+    public E peek() {
         return decoratedBlockingQueue.peek();
     }
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 
-public interface FileBlockingQueue<E> extends BlockingQueue {
+public interface FileBlockingQueue<E> extends BlockingQueue<E> {
     public void saveQueue() throws FileNotFoundException, IOException;
     public void loadQueue() throws IOException, ClassNotFoundException;
     public void setFile (File file);

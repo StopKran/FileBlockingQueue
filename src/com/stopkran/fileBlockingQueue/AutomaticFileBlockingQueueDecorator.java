@@ -6,23 +6,23 @@ import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class AutomaticFileBlockingQueueDecorator extends FileBlockingQueueDecorator implements AutomaticFileBlockingQueue{
+public class AutomaticFileBlockingQueueDecorator<E> extends FileBlockingQueueDecorator<E> implements AutomaticFileBlockingQueue<E>{
 
     boolean autosave;
     boolean currentStateSaved;
     Exception lastException;
 
-    public AutomaticFileBlockingQueueDecorator(BlockingQueue decoratedBlockingQueue) {
+    public AutomaticFileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue) {
         super(decoratedBlockingQueue);
         autosave = false;
     }
 
-    public AutomaticFileBlockingQueueDecorator(BlockingQueue decoratedBlockingQueue, File queueFile) {
+    public AutomaticFileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue, File queueFile) {
         super(decoratedBlockingQueue, queueFile);
         autosave = true;
     }
 
-    public AutomaticFileBlockingQueueDecorator(BlockingQueue decoratedBlockingQueue, String queueFile) {
+    public AutomaticFileBlockingQueueDecorator(BlockingQueue<E> decoratedBlockingQueue, String queueFile) {
         super(decoratedBlockingQueue, queueFile);
         autosave = true;
     }
@@ -53,13 +53,13 @@ public class AutomaticFileBlockingQueueDecorator extends FileBlockingQueueDecora
         this.autosave = autosave;
     }
 
-    public boolean add(Object o) {
+    public boolean add(E o) {
         boolean tmp = decoratedBlockingQueue.add(o);
         save();
         return tmp;
     }
 
-    public void put(Object o) throws InterruptedException {
+    public void put(E o) throws InterruptedException {
         decoratedBlockingQueue.put(o);
         save();
     }
@@ -82,14 +82,14 @@ public class AutomaticFileBlockingQueueDecorator extends FileBlockingQueueDecora
         return tmp;
     }
 
-    public Object poll(long l, TimeUnit timeUnit) throws InterruptedException {
-        Object tmp = decoratedBlockingQueue.poll(l, timeUnit);
+    public E poll(long l, TimeUnit timeUnit) throws InterruptedException {
+        E tmp = decoratedBlockingQueue.poll(l, timeUnit);
         save();
         return tmp;
     }
 
-    public Object take() throws InterruptedException {
-        Object tmp = decoratedBlockingQueue.take();
+    public E take() throws InterruptedException {
+        E tmp = decoratedBlockingQueue.take();
         save();
         return tmp;
     }
@@ -100,38 +100,38 @@ public class AutomaticFileBlockingQueueDecorator extends FileBlockingQueueDecora
         return tmp;
     }
 
-    public boolean offer(Object o, long l, TimeUnit timeUnit) throws InterruptedException {
+    public boolean offer(E o, long l, TimeUnit timeUnit) throws InterruptedException {
         boolean tmp = decoratedBlockingQueue.offer(o, l, timeUnit);
         save();
         return tmp;
     }
 
-    public boolean offer(Object o) {
+    public boolean offer(E o) {
         boolean tmp = decoratedBlockingQueue.offer(o);
         save();
         return tmp;
     }
 
-    public Object remove() {
-        Object tmp = decoratedBlockingQueue.remove();
+    public E remove() {
+        E tmp = decoratedBlockingQueue.remove();
         save();
         return tmp;
     }
 
-    public Object poll() {
-        Object tmp = decoratedBlockingQueue.poll();
+    public E poll() {
+        E tmp = decoratedBlockingQueue.poll();
         save();
         return tmp;
     }
 
-    public Object element() {
-        Object tmp = decoratedBlockingQueue.element();
+    public E element() {
+        E tmp = decoratedBlockingQueue.element();
         save();
         return tmp;
     }
 
-    public Object peek() {
-        Object tmp = decoratedBlockingQueue.peek();
+    public E peek() {
+        E tmp = decoratedBlockingQueue.peek();
         save();
         return tmp;
     }
